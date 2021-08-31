@@ -32,19 +32,19 @@ function titleClickHandler(event){
   console.log('article:', article);
     // let article = document.getElementById(hrefAttribute);
     // console.log(article);
-
   // /* add class 'active' to the correct article */
   article.classList.add('active');
 }
 /* Function clearLinks */
 
 function clearLinks(){
-
-  let links2Clear = document.querySelectorAll('.titles > li');
-  console.log('links2Clear', links2Clear);
-  for(let link of links2Clear){
-      link.innerHTML = '';
-  }
+  console.log('funkcja clearLinks została wywołana');
+  // let links2Clear = document.querySelector('.titles li');
+  // console.log('links2Clear', links2Clear);
+  document.querySelector('.titles').innerHTML = '';
+  // for(let link of links2Clear){
+  //     link.innerHTML = '';
+  // }
 }
 /* ... */
 
@@ -57,19 +57,21 @@ const optArticleSelector = '.post',
 
 function generateTitleLinks(){
   console.log('funkcja generateTitleLinks została wywołana');
-  let listArticles = document.querySelectorAll(optArticleSelector);
+  let listArticles = document.querySelectorAll('.post');
   console.log('listArticles:', listArticles);
   for(let article of listArticles) {
     const articleId = article.getAttribute('id');
     // const articleTitle = article.firstElementChild.textContent;
     console.log('articleId is:', articleId)
-    const articleTitle = article.querySelector(optTitleSelector);
+    const articleTitle = article.querySelector('.post-title');
     console.log('articleTitle:', articleTitle);
+    console.log('articleTitle.textContent:', articleTitle.textContent)
     const articleLink = '<li><a href="#' + articleId + '><span>' + articleTitle.textContent + '</span></a></li>';
     console.log('articleLink =',  articleLink);
-    let titleList = document.querySelector('.titles');
-    console.log('titleList:', titleList);
-    titleList.insertAdjacentElement('afterbegin', articleLink);
+    let listOfTitles = document.querySelector('.titles');
+    console.log('listOfTitles:', listOfTitles);
+    // add articleLink to HTML
+
   }
 }
 //
