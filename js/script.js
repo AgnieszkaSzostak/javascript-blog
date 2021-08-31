@@ -39,12 +39,12 @@ function titleClickHandler(event){
 
 function clearLinks(){
   console.log('funkcja clearLinks została wywołana');
-  // let links2Clear = document.querySelector('.titles li');
+  // let links2Clear = document.querySelectorAll('.titles li');
   // console.log('links2Clear', links2Clear);
-  document.querySelector('.titles').innerHTML = '';
   // for(let link of links2Clear){
   //     link.innerHTML = '';
   // }
+  document.querySelector('.titles').innerHTML = '';
 }
 /* ... */
 
@@ -66,12 +66,15 @@ function generateTitleLinks(){
     const articleTitle = article.querySelector('.post-title');
     console.log('articleTitle:', articleTitle);
     console.log('articleTitle.textContent:', articleTitle.textContent)
-    const articleLink = '<li><a href="#' + articleId + '><span>' + articleTitle.textContent + '</span></a></li>';
+    const articleLink = '<li><a href="#' + articleId + '"><span>' + articleTitle.textContent + '</span></a></li>';
     console.log('articleLink =',  articleLink);
     let listOfTitles = document.querySelector('.titles');
     console.log('listOfTitles:', listOfTitles);
     // add articleLink to HTML
-
+    listOfTitles.innerHTML = listOfTitles.innerHTML + articleLink;
+    console.log('listOfTitles.innerHTML:', listOfTitles.innerHTML);
+    // sleep(2000);
+    // listOfTitles.insertAdjacentHTML('beforebegin', articleLink);
   }
 }
 //
