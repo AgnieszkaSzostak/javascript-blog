@@ -51,26 +51,25 @@ function generateTitleLinks(){
   console.log('funkcja generateTitleLinks została wywołana');
   const articles = document.querySelectorAll(optArticleSelector);
   console.log('articles:', articles);
+  const titleList = document.querySelector(optTitleListSelector);
+  console.log('titleList:', titleList);
+  let html = '';
   for(let article of articles) {
     const articleId = article.getAttribute('id');
-    console.log('articleId is:', articleId)
+    console.log('articleId is:', articleId);
     const articleTitle = article.querySelector(optTitleSelector).innerHTML;
     console.log('articleTitle:', articleTitle);
     const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
     console.log('linkHTML =',  linkHTML);
-    const titleList = document.querySelector(optTitleListSelector);
-    console.log('titleList:', titleList);
-    titleList.innerHTML = titleList.innerHTML + linkHTML;
-    console.log('titleList.innerHTML:', titleList.innerHTML);
-
-    // titleList.insertAdjacentHTML('beforebegin', linkHTML);
+    html = html + linkHTML;
+    console.log('html:', html);
   }
-
+  titleList.innerHTML = html;
 }
 const optArticleSelector = '.post',
       optTitleSelector = '.post-title',
       optTitleListSelector = '.titles';
-// clearLinks();
+clearLinks();
 generateTitleLinks();
 const links = document.querySelectorAll('.titles li');
 console.log('links:', links);
