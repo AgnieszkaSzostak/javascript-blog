@@ -1,30 +1,6 @@
 'use strict';
 
 
-// po kliknięciu linka:
-
-//    ustaw klasy linków:
-//      usuń klasę active ze wszystkich linków na liście tytułów,
-//      dodaj klasę active do klikniętego linka,
-
-//  ukryj wszystkie artykuły:
-//      usuń klasę active ze wszystkich artykułów,
-
-//  znajdź artykuł do wyświetlenia:
-//      z klikniętego linka weź zawartość atrybutu href, np. #article-2,
-//      znajdź na stronie element pasujący do selektora takiego, jak wartość atrybutu href, np. #article-2 – czyli   szukamy elementu o id="article-2",
-
-//  wyświetl znaleziony artykuł:
-//      dodaj klasę active do znalezionego artykułu.
-
-// function titleClickHandler(){
-//   const links = document.querySelectorAll('.titles a');
-//   console.log(links);
-// }
-//
-// const buttonTest = document.getElementById('button-test');
-//
-// buttonTest.addEventListener('click', titleClickHandler);
 function titleClickHandler(event){
   event.preventDefault();
   const clickedElement = this;
