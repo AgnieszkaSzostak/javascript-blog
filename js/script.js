@@ -3,7 +3,7 @@
 function titleClickHandler(event){
     event.preventDefault();
     const clickedElement = this;
-    const activeLinks = document.querySelectorAll('.titles a.active');
+    const activeLinks = document.querySelectorAll('.titles li .active ');
     for(let activeLink of activeLinks){
       activeLink.classList.remove('active');
     }
@@ -17,7 +17,7 @@ function titleClickHandler(event){
     article.classList.add('active');
 }
 
-const links = document.querySelectorAll('.titles a');
+const links = document.querySelectorAll('.titles li');
 for(let link of links){
   link.addEventListener('click', titleClickHandler);
 }
