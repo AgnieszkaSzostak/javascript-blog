@@ -17,7 +17,7 @@ function titleClickHandler(event){
     article.classList.add('active');
 }
 
-const links = document.querySelectorAll('.titles li');
+const links = document.querySelectorAll('.titles a');
 for(let link of links){
     link.addEventListener('click', titleClickHandler);
 }
