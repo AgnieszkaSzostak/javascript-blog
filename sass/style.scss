@@ -54,6 +54,9 @@ body {
 
 .posts {
   flex: 2 0 0;
+  position: relative;
+  overflow: scroll;
+
 }
 
 .sidebar, .posts {
@@ -103,9 +106,19 @@ body {
 /* Post */
 
 .post {
-  display: none;
+  // display: none;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 450ms linear;
+  padding-right: inherit;
+  text-align: justify;
+
+
   &.active {
-    display: block;
+    // display: block;
+    visibility: visible;
+    opacity: 1;
   }
 }
 
