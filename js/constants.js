@@ -1,3 +1,3 @@
-const optArticleSelector = '.post';
-const optTitleSelector = '.post-title';
-const optTitleListSelector = '.titles';
+// const optArticleSelector = '.post';
+// const optTitleSelector = '.post-title';
+// const optTitleListSelector = '.titles';
