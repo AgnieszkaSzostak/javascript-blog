@@ -117,6 +117,7 @@ const addClickListenersToAuthors = function() {
 
 
 clearLinks();
+generateTitleLinks();
 generateTags();
 addClickListenersToTags();
 generateAuthors();
