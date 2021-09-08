@@ -8,6 +8,14 @@ const optTagsListSelector = '.tags.list';
 const optCloudClassCount = 4;
 const optCloudClassPrefix = 'tag-size-';
 
+const markArticleTitleActive = function(){
+  const activeArticle = document.querySelector(optArticleSelector +'.active');
+  const activeArticleId = activeArticle.getAttribute('id');
+  const titleList = document.querySelector(optTitleListSelector);
+  const selectedArticleTitle = titleList.querySelector('a[href="#' + activeArticleId + '"]');
+
+  selectedArticleTitle.classList.add('active');
+};
 const titleClickHandler = function(event){
   event.preventDefault();
   const clickedElement = this;
@@ -47,6 +55,7 @@ const generateTitleLinks = function(customSelector = ''){
     link.addEventListener('click', titleClickHandler);
   }
 };
+
 const calculateTagsParams = function(tags){
   const params = 
   { 
@@ -82,6 +91,7 @@ const generateTags = function(){
     for(let tag of articleTagsArray) {
       const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
       html = html + ' ' + tagLinkHTML;
+      // eslint-disable-next-line no-prototype-builtins
       if(!allTags.hasOwnProperty(tag)){
         allTags[tag] = 1; 
       }
@@ -116,6 +126,7 @@ const tagClickHandler = function(event){
     tagLink.classList.add('active');
   }
   generateTitleLinks('[data-tags~="' + tag + '"]');
+  markArticleTitleActive();
 };
 
 const addClickListenersToTags = function(){
@@ -141,7 +152,9 @@ const authorClickHandler = function(event) {
   const clickedElement = this;
   const href = clickedElement.getAttribute('href');
   const tag = href.replace('#author-', '');
+  
   generateTitleLinks('[data-author="' + tag + '"]');
+  markArticleTitleActive();
 };
 
 const addClickListenersToAuthors = function() {
@@ -149,7 +162,6 @@ const addClickListenersToAuthors = function() {
   for(let authorLink of authorsLinks)
     authorLink.addEventListener('click', authorClickHandler); 
 };
-
 
 clearLinks();
 generateTags();
