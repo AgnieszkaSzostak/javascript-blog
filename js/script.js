@@ -5,6 +5,8 @@ const optTitleListSelector = '.titles';
 const optArticleTagsSelector = '.post-tags .list';
 const optArticleAuthorSelector = '.post-author a';
 const optTagsListSelector = '.tags.list';
+const optCloudClassCount = 4;
+const optCloudClassPrefix = 'tag-size-';
 
 const titleClickHandler = function(event){
   event.preventDefault();
@@ -26,6 +28,7 @@ const titleClickHandler = function(event){
 const clearLinks = function(){
   const titleList = document.querySelector(optTitleListSelector);
   titleList.innerHTML = '';
+  generateTitleLinks();
 };
 
 const generateTitleLinks = function(customSelector = ''){
@@ -44,10 +47,32 @@ const generateTitleLinks = function(customSelector = ''){
     link.addEventListener('click', titleClickHandler);
   }
 };
+const calculateTagsParams = function(tags){
+  const params = 
+  { 
+    max : 0,
+    min : 999999
+  };
+  for(let tag in tags){
+    console.log(tag + 'is used' + tags[tag] + ' times');
+    params.max = Math.max(tags[tag], params.max);
+    params.min = Math.min(tags[tag], params.min);
+  }
+  console.log('params:', params);
+  return params;
+};
+
+const calculateTagsClass = function(count, params){
+  const normalizedCount = count - params.min;
+  const normalizedMax = params.max - params.min;
+  const percentage = normalizedCount / normalizedMax;
+  const classNumber = Math.floor ( percentage * (optCloudClassCount - 1) + 1);
+  return optCloudClassPrefix + classNumber;
+};
 
 const generateTags = function(){
-  /* [NEW] create a new variable allTags with an empty array */
-  let allTags = [];
+  /* [NEW] create a new variable allTags with an empty object */
+  const allTags = {};
   const articles = document.querySelectorAll(optArticleSelector);
   for(let article of articles){
     const tagsWrapper = article.querySelector(optArticleTagsSelector);
@@ -57,14 +82,24 @@ const generateTags = function(){
     for(let tag of articleTagsArray) {
       const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
       html = html + ' ' + tagLinkHTML;
-      if(allTags.indexOf(tagLinkHTML) == -1){
-        allTags.push(tagLinkHTML); 
+      if(!allTags.hasOwnProperty(tag)){
+        allTags[tag] = 1; 
+      }
+      else {
+        allTags[tag]++;      
       }
       tagsWrapper.innerHTML = html;
     }
   }
   const tagList = document.querySelector(optTagsListSelector);
-  tagList.innerHTML = allTags.join(' ');
+  const tagsParams = calculateTagsParams(allTags);
+  console.log('tagsParams:', tagsParams);
+  let allTagsHTML = '';
+  for (let tag in allTags) {
+    allTagsHTML += '<li><a href="#tag-' +tag + '" class="' + calculateTagsClass(allTags[tag],tagsParams) + '">' + tag + '</a></li>'; 
+  }
+  tagList.innerHTML = allTagsHTML;
+  console.log('allTags', allTags);
 };
 
 const tagClickHandler = function(event){
@@ -117,7 +152,6 @@ const addClickListenersToAuthors = function() {
 
 
 clearLinks();
-generateTitleLinks();
 generateTags();
 addClickListenersToTags();
 generateAuthors();

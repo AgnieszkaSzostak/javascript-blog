@@ -8,6 +8,10 @@ $color-dark: #444;
 $font-logo: 'Sacramento', cursive;
 $font-header: 'Oswald', sans-serif;
 $font-text: 'Source Sans Pro', sans-serif;
+$font-size-1: 90%;
+$font-size-2: 110%;
+$font-size-3: 130%;
+$font-size-4: 150%;
 
 /* Global */
 
@@ -132,3 +136,29 @@ body {
     margin: 0 10px 0 0;
   }
 }
+
+.tags li {
+  display: inline;
+  
+  a {
+    text-decoration: none;
+  }
+}
+
+.tag-size-1 {
+  font-size: $font-size-1;
+}
+
+.tag-size-2 {
+  font-size: $font-size-2;
+}
+
+.tag-size-3 {
+  font-size: $font-size-3;
+}
+
+.tag-size-4 {
+  font-size: $font-size-4;
+}
+
+
