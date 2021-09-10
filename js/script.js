@@ -1,4 +1,8 @@
 'use strict';
+const templates = {
+  articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+};
 
 const opts = {
   ArticleSelector : '.post',
@@ -51,7 +55,13 @@ const generateTitleLinks = function(customSelector = ''){
   for(let article of articles) {
     const articleId = article.getAttribute('id');
     const articleTitle = article.querySelector(opts.TitleSelector).innerHTML;
-    const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+    // const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+    const linkHTMLData = {
+      id: articleId, 
+      title: articleTitle
+    };
+    const linkHTML = templates.articleLink(linkHTMLData);
+    console.log('linkHTML:', linkHTML);
     html = html + linkHTML;
   }
   titleList.innerHTML = html;
@@ -68,23 +78,23 @@ const calculateTagsParams = function(tags){
     min : 999999
   };
   for(let tag in tags){
-    console.log(tag + 'is used' + tags[tag] + ' times');
+    // console.log(tag + 'is used' + tags[tag] + ' times');
     params.max = Math.max(tags[tag], params.max);
     params.min = Math.min(tags[tag], params.min);
   }
-  console.log('params:', params);
+  // console.log('params:', params);
   return params;
 };
 
 
 const calculateTagsClass = function(count, params){
   const normalizedCount = count - params.min;
-  console.log('normalizedCount', normalizedCount);
+  // console.log('normalizedCount', normalizedCount);
   const normalizedMax = params.max - params.min;
   const percentage = normalizedCount / normalizedMax;
-  console.log('percentage', percentage);
+  // console.log('percentage', percentage);
   const classNumber = Math.floor ( percentage * (opts.CloudClassCount - 1) + 1);
-  console.log('classNumber', classNumber);
+  // console.log('classNumber', classNumber);
   return opts.CloudClassPrefix + classNumber;
 };
 
@@ -96,12 +106,19 @@ const generateTags = function(){
     const tagsWrapper = article.querySelector(opts.ArticleTagsSelector);
     let html = '';
     const articleTags = article.getAttribute('data-tags');
-    console.log('articleTags:', articleTags);
+    // console.log('articleTags:', articleTags);
     const articleTagsArray = articleTags.split(' ');
-    console.log('articleTagsArray:', articleTagsArray);
+    // console.log('articleTagsArray:', articleTagsArray);
     for(let tag of articleTagsArray) {
-      const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
-      html = html + ' ' + tagLinkHTML;
+      // const tagLinkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
+      const linkHTMLData = 
+        {
+          id: 'tag-' + tag,
+          title: tag
+        };
+      const linkHTML = templates.articleLink(linkHTMLData);
+      console.log('linkHTML -tag:',linkHTML);
+      html = html + ' ' + linkHTML;
       // eslint-disable-next-line no-prototype-builtins
       if(!allTags.hasOwnProperty(tag)){
         allTags[tag] = 1; 
@@ -114,13 +131,26 @@ const generateTags = function(){
   }
   const tagList = document.querySelector(opts.TagsListSelector);
   const tagsParams = calculateTagsParams(allTags);
-  console.log('tagsParams:', tagsParams);
-  let allTagsHTML = '';
+  // §('tagsParams:', tagsParams);
+  // let allTagsHTML = '';
+  const allTagsData = 
+    {
+      tags: []
+    }; 
   for (let tag in allTags) {
-    allTagsHTML += '<li><a href="#tag-' +tag + '" class="' + calculateTagsClass(allTags[tag],tagsParams) + '">' + tag + '</a></li>'; 
+    // allTagsHTML += '<li><a href="#tag-' +tag + '" class="' + calculateTagsClass(allTags[tag],tagsParams) + '">' + tag + '</a></li>';
+    allTagsData.tags.push(
+      {
+        tag: tag,
+        count: allTags[tag], // remove?
+        className: calculateTagsClass(allTags[tag], tagsParams)
+      });
   }
-  tagList.innerHTML = allTagsHTML;
-  console.log('allTags', allTags);
+  tagList.innerHTML = templates.tagCloudLink(allTagsData);
+  console.log('allTagsData', allTagsData);
+  console.log('tagList.innerHTML',tagList.innerHTML);
+  
+  // console.log('allTags', allTags);
 };
 
 const tagClickHandler = function(event){
@@ -154,7 +184,7 @@ const calculateAuthorsParams = function(authors){
     min : 999999
   };
   for(let author in authors){
-    console.log(author + 'is used ' + authors[author] + ' times');
+    // console.log(author + 'is used ' + authors[author] + ' times');
     if(params.max < authors[author]){
       params.max = authors[author];
     }
@@ -162,7 +192,7 @@ const calculateAuthorsParams = function(authors){
       params.min = authors[author];
     }
   }
-  console.log('params', params);
+  // // console.log('params', params);
   return params;
 };
 
@@ -177,12 +207,16 @@ const calculateAuthorsClass = function(count, params){
 const generateAuthors = function(){
   const allAuthors = {};
   const articles = document.querySelectorAll(opts.ArticleSelector);
-  console.log('articles:', articles);
+  // console.log('articles:', articles);
   for(let article of articles){
     const authorWrapper = article.querySelector('.post-author');
     const articleAuthor = article.getAttribute('data-author');
-    const authorLink = '<a href="#author-' + articleAuthor + '">' + articleAuthor + '</a>';
-    authorWrapper.innerHTML = authorLink;  
+    console.log('articleAuthor', articleAuthor);
+    // const authorLink = '<a href="#author-' + articleAuthor + '">' + articleAuthor + '</a>';
+    const linkHTMLData = {id: 'author-' + articleAuthor, title: articleAuthor};
+    const linkHTML = templates.articleLink(linkHTMLData);
+    console.log('linkHTML -author', linkHTML);
+    authorWrapper.innerHTML = linkHTML;  
     // eslint-disable-next-line no-prototype-builtins
     if (!allAuthors.hasOwnProperty(articleAuthor)){
       allAuthors[articleAuthor] = 1;
@@ -191,7 +225,7 @@ const generateAuthors = function(){
       allAuthors[articleAuthor]++;
     }
   }
-  console.log('allAuthors', allAuthors);
+  // console.log('allAuthors', allAuthors);
   // eslint-disable-next-line no-unused-vars
   const authorsList = document.querySelector(opts.AuthorsListSelector);
   // eslint-disable-next-line no-unused-vars

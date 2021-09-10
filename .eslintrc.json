@@ -8,6 +8,7 @@
         "ecmaVersion": 2015
     },
     "rules": {
+        
         "indent": [
             "error",
             2
@@ -27,5 +28,9 @@
         "no-console": [
             "off"
         ]
+    },  
+    "globals": {
+        "Handlebars": false
     }
 }
+
