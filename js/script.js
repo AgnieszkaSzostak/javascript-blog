@@ -14,7 +14,7 @@ const opts = {
   TagsListSelector : '.tags.list',
   AuthorsListSelector : '.list.authors',
   CloudClassCount : 4,
-  CloudClassPrefix : 'tag-size-',
+  CloudClassPrefix : 'tag-size-'
 
 };
 
@@ -24,8 +24,13 @@ const markArticleTitleActive = function(){
   const activeArticleId = activeArticle.getAttribute('id');
   const titleList = document.querySelector(opts.TitleListSelector);
   const selectedArticleTitle = titleList.querySelector('a[href="#' + activeArticleId + '"]');
-
-  selectedArticleTitle.classList.add('active');
+  if (selectedArticleTitle === null) {
+    const firstTitle = document.querySelector('.list.titles a');
+    firstTitle.classList.add('active');
+    
+  } else {
+    selectedArticleTitle.classList.add('active');
+  }
 };
 const titleClickHandler = function(event){
   event.preventDefault();
@@ -119,7 +124,6 @@ const generateTags = function(){
       tagsWrapper.innerHTML = html;
     }
   }
-  console.log('allTags', allTags);
   const tagList = document.querySelector(opts.TagsListSelector);
   const tagsParams = calculateTagsParams(allTags);
   const allTagsData = 
@@ -134,8 +138,6 @@ const generateTags = function(){
       });
   }
   tagList.innerHTML = templates.tagCloudLink(allTagsData);
-  console.log('allTagsData', allTagsData);
-  console.log('tagList.innerHTML',tagList.innerHTML);
 };
 
 const tagClickHandler = function(event){
@@ -208,7 +210,6 @@ const generateAuthors = function(){
     }
     authorWrapper.innerHTML = linkHTML;  
   }
-  console.log('allAuthors', allAuthors);
   const authorsList = document.querySelector(opts.AuthorsListSelector);
   const authorsParams = calculateAuthorsParams(allAuthors);
   const allAuthorsData = 
@@ -223,22 +224,23 @@ const generateAuthors = function(){
       });
   }
   authorsList.innerHTML = templates.authorCloudLink(allAuthorsData);
-  console.log('allAuthorsData:', allAuthorsData);
-  console.log('authorsList.innerHTML:', authorsList.innerHTML);
 };
 
 const authorClickHandler = function(event) {
   event.preventDefault();
   const clickedElement = this;
+  console.log('clickedElement', clickedElement);
   const href = clickedElement.getAttribute('href');
   const tag = href.replace('#author-', '');
+  console.log('tag:', tag);
   
   generateTitleLinks('[data-author="' + tag + '"]');
   markArticleTitleActive();
 };
 
 const addClickListenersToAuthors = function() {
-  const authorsLinks = document.querySelectorAll(opts.ArticleAuthorSelector, '.list.authors a');
+  const authorsLinks = document.querySelectorAll('.post-author a, .authors.list a');
+  console.log('authorsLinks', authorsLinks);
   for(let authorLink of authorsLinks)
     authorLink.addEventListener('click', authorClickHandler); 
 };
