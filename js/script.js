@@ -36,7 +36,7 @@ const markArticleTitleActive = function(){
   if (selectedArticleTitle === null) {
     const firstTitle = document.querySelector('.list.titles a');
     firstTitle.classList.add('active');
-    
+    activeArticle.classList.remove('active');
   } else {
     selectedArticleTitle.classList.add('active');
   }
