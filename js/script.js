@@ -8,7 +8,7 @@ const templates = {
 const opts = {
   selector : {
     list : {
-      titles : '.titles', 
+      titles : '.titles',
       tags : '.tags.list',
       authors : '.list.authors',
     },
@@ -27,7 +27,6 @@ const opts = {
   }
 };
 
-
 const markArticleTitleActive = function(){
   const activeArticle = document.querySelector(opts.selector.article.content +'.active');
   const activeArticleId = activeArticle.getAttribute('id');
@@ -37,6 +36,9 @@ const markArticleTitleActive = function(){
     const firstTitle = document.querySelector('.list.titles a');
     firstTitle.classList.add('active');
     activeArticle.classList.remove('active');
+    const firstTitleId = firstTitle.getAttribute('href');
+    const activatedArticle = document.querySelector(firstTitleId);
+    activatedArticle.classList.add('active');
   } else {
     selectedArticleTitle.classList.add('active');
   }
@@ -72,7 +74,7 @@ const generateTitleLinks = function(customSelector = ''){
     const articleId = article.getAttribute('id');
     const articleTitle = article.querySelector(opts.selector.article.title).innerHTML;
     const linkHTMLData = {
-      id: articleId, 
+      id: articleId,
       title: articleTitle
     };
     const linkHTML = templates.articleLink(linkHTMLData);
@@ -86,8 +88,8 @@ const generateTitleLinks = function(customSelector = ''){
 };
 
 const calculateTagsParams = function(tags){
-  const params = 
-  { 
+  const params =
+  {
     max : 0,
     min : 999999
   };
@@ -116,7 +118,7 @@ const generateTags = function(){
     const articleTags = article.getAttribute('data-tags');
     const articleTagsArray = articleTags.split(' ');
     for(let tag of articleTagsArray) {
-      const linkHTMLData = 
+      const linkHTMLData =
         {
           id: 'tag-' + tag,
           title: tag
@@ -125,20 +127,20 @@ const generateTags = function(){
       html = html + ' ' + linkHTML;
       // eslint-disable-next-line no-prototype-builtins
       if(!allTags.hasOwnProperty(tag)){
-        allTags[tag] = 1; 
+        allTags[tag] = 1;
       }
       else {
-        allTags[tag]++;      
+        allTags[tag]++;
       }
       tagsWrapper.innerHTML = html;
     }
   }
   const tagList = document.querySelector(opts.selector.list.tags);
   const tagsParams = calculateTagsParams(allTags);
-  const allTagsData = 
+  const allTagsData =
     {
       tags: []
-    }; 
+    };
   for (let tag in allTags) {
     allTagsData.tags.push(
       {
@@ -174,7 +176,7 @@ const addClickListenersToTags = function(){
 };
 
 const calculateAuthorsParams = function(authors){
-  const params = 
+  const params =
   {
     max : 0,
     min : 999999
@@ -204,9 +206,9 @@ const generateAuthors = function(){
   for(let article of articles){
     const authorWrapper = article.querySelector('.post-author');
     const articleAuthor = article.getAttribute('data-author');
-    const linkHTMLData = 
+    const linkHTMLData =
     {
-      id: 'author-' + articleAuthor, 
+      id: 'author-' + articleAuthor,
       title: articleAuthor
     };
     const linkHTML = templates.articleLink(linkHTMLData);
@@ -217,14 +219,14 @@ const generateAuthors = function(){
     else {
       allAuthors[articleAuthor]++;
     }
-    authorWrapper.innerHTML = linkHTML;  
+    authorWrapper.innerHTML = linkHTML;
   }
   const authorsList = document.querySelector(opts.selector.list.authors);
   const authorsParams = calculateAuthorsParams(allAuthors);
-  const allAuthorsData = 
+  const allAuthorsData =
     {
       authors: []
-    }; 
+    };
   for(let articleAuthor in allAuthors){
     allAuthorsData.authors.push(
       {
@@ -238,20 +240,17 @@ const generateAuthors = function(){
 const authorClickHandler = function(event) {
   event.preventDefault();
   const clickedElement = this;
-  console.log('clickedElement', clickedElement);
   const href = clickedElement.getAttribute('href');
   const tag = href.replace('#author-', '');
-  console.log('tag:', tag);
-  
+
   generateTitleLinks('[data-author="' + tag + '"]');
   markArticleTitleActive();
 };
 
 const addClickListenersToAuthors = function() {
   const authorsLinks = document.querySelectorAll('.post-author a, .authors.list a');
-  console.log('authorsLinks', authorsLinks);
   for(let authorLink of authorsLinks)
-    authorLink.addEventListener('click', authorClickHandler); 
+    authorLink.addEventListener('click', authorClickHandler);
 };
 
 clearLinks();
